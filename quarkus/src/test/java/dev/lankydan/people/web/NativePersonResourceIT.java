@@ -1,4 +1,4 @@
-package dev.timoangerer.web.people;
+package dev.lankydan.people.web;
 
 import io.quarkus.test.junit.NativeImageTest;
 
