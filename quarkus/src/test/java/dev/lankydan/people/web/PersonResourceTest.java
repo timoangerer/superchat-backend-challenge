@@ -1,11 +1,12 @@
 package dev.lankydan.people.web;
 
-import dev.lankydan.people.model.Person;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import dev.timoangerer.people.model.Person;
 
 import java.util.UUID;
 

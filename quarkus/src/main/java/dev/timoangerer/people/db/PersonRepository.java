@@ -1,10 +1,11 @@
-package dev.lankydan.people.db;
-
-import dev.lankydan.core.db.PersistenceException;
-import dev.lankydan.people.model.Person;
+package dev.timoangerer.people.db;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.sql.DataSource;
+
+import dev.timoangerer.core.db.PersistenceException;
+import dev.timoangerer.people.model.Person;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
