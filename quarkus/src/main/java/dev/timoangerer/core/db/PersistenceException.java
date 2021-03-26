@@ -1,4 +1,4 @@
-package dev.lankydan.core.db;
+package dev.timoangerer.core.db;
 
 public class PersistenceException extends RuntimeException {
 

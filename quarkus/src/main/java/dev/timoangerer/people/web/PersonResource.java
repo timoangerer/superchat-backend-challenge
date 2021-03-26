@@ -1,11 +1,12 @@
-package dev.lankydan.people.web;
-
-import dev.lankydan.people.db.PersonRepository;
-import dev.lankydan.people.model.Person;
+package dev.timoangerer.people.web;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import dev.timoangerer.people.db.PersonRepository;
+import dev.timoangerer.people.model.Person;
+
 import java.util.List;
 import java.util.UUID;
 
