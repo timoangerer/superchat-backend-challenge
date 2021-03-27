@@ -1,4 +1,4 @@
-package dev.timoangerer.people.model;
+package dev.timoangerer.contact.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,19 +10,19 @@ import java.util.UUID;
 // maybe write a super short post on how to serialize but not deserialize fields - https://stackoverflow.com/questions/16019834/ignoring-property-when-deserializing
 // json ignore doesn't really cut it here
 @JsonIgnoreProperties(value = { "id" }, allowGetters = true)
-public class Person {
+public class Contact {
 
   private UUID id;
   private String name;
-  private int age;
+  private String email;
 
-  public Person(UUID id, String name, int age) {
+  public Contact(UUID id, String name, String email) {
     this.id = id;
     this.name = name;
-    this.age = age;
+    this.email = email;
   }
 
-  public Person() {
+  public Contact() {
   }
 
   public UUID getId() {
@@ -41,11 +41,11 @@ public class Person {
     this.name = name;
   }
 
-  public int getAge() {
-    return age;
+  public String getEmail() {
+    return email;
   }
 
-  public void setAge(int age) {
-    this.age = age;
+  public void setEmail(String email) {
+    this.email = email;
   }
 }

@@ -1,10 +1,10 @@
-package dev.timoangerer.people.db;
+package dev.timoangerer.contact.db;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.sql.DataSource;
 
+import dev.timoangerer.contact.model.Contact;
 import dev.timoangerer.core.db.PersistenceException;
-import dev.timoangerer.people.model.Person;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,31 +16,31 @@ import java.util.UUID;
 
 @ApplicationScoped
 // @Singleton
-public class PersonRepository {
+public class ContactRepository {
 
-  private static final String FIND_ALL = "SELECT * FROM people";
-  private static final String FIND_ALL_BY_ID = "SELECT * FROM people WHERE id = ?";
-  private static final String INSERT = "INSERT INTO people (id, name, age) VALUES (?, ?, ?)";
-  private static final String UPDATE = "UPDATE people SET name = ?, age = ? WHERE id = ?";
-  private static final String DELETE = "DELETE FROM people WHERE id = ?";
+  private static final String FIND_ALL = "SELECT * FROM contacts";
+  private static final String FIND_ALL_BY_ID = "SELECT * FROM contacts WHERE id = ?";
+  private static final String INSERT = "INSERT INTO contacts (id, name, email) VALUES (?, ?, ?)";
+  private static final String UPDATE = "UPDATE contacts SET name = ?, email = ? WHERE id = ?";
+  private static final String DELETE = "DELETE FROM contacts WHERE id = ?";
 
   private final DataSource dataSource;
 
-  public PersonRepository(DataSource dataSource) {
+  public ContactRepository(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 
-  public List<Person> findAll() {
-    List<Person> result = new ArrayList<>();
+  public List<Contact> findAll() {
+    List<Contact> result = new ArrayList<>();
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(FIND_ALL);
         ResultSet resultSet = statement.executeQuery()) {
       while (resultSet.next()) {
         result.add(
-            new Person(
+            new Contact(
                 UUID.fromString(resultSet.getString("id")),
                 resultSet.getString("name"),
-                resultSet.getInt("age")));
+                resultSet.getString("email")));
       }
     } catch (SQLException e) {
       throw new PersistenceException("boom", e.getCause());
@@ -48,16 +48,16 @@ public class PersonRepository {
     return result;
   }
 
-  public Person findById(UUID id) {
+  public Contact findById(UUID id) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_ID)) {
       statement.setObject(1, id);
       try (ResultSet resultSet = statement.executeQuery()) {
         if (resultSet.next()) {
-          return new Person(
+          return new Contact(
               UUID.fromString(resultSet.getString("id")),
               resultSet.getString("name"),
-              resultSet.getInt("age"));
+              resultSet.getString("email"));
         }
       }
     } catch (SQLException e) {
@@ -66,12 +66,12 @@ public class PersonRepository {
     return null;
   }
 
-  public Person insert(Person person) {
+  public Contact insert(Contact person) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(INSERT)) {
       statement.setObject(1, person.getId());
       statement.setString(2, person.getName());
-      statement.setInt(3, person.getAge());
+      statement.setString(3, person.getEmail());
       statement.executeUpdate();
     } catch (SQLException e) {
       throw new PersistenceException(e);
@@ -79,11 +79,11 @@ public class PersonRepository {
     return person;
   }
 
-  public Person update(Person person) {
+  public Contact update(Contact person) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(UPDATE)) {
       statement.setString(1, person.getName());
-      statement.setInt(2, person.getAge());
+      statement.setString(2, person.getEmail());
       statement.setObject(3, person.getId());
       statement.executeUpdate();
     } catch (SQLException e) {

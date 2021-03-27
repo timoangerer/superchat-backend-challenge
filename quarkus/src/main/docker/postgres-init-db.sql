@@ -1,1 +1,1 @@
-create table people (id UUID PRIMARY KEY, name varchar not null, age integer not null);
+create table contacts (id UUID PRIMARY KEY, name varchar, email varchar(254) UNIQUE);
