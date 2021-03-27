@@ -20,7 +20,7 @@ public class ContactRepository {
 
   private static final String FIND_ALL = "SELECT * FROM contacts";
   private static final String FIND_ALL_BY_ID = "SELECT * FROM contacts WHERE id = ?";
-  private static final String INSERT = "INSERT INTO contacts (id, name, email) VALUES (?, ?, ?)";
+  private static final String INSERT = "INSERT INTO contacts (name, email) VALUES (?, ?)";
   private static final String UPDATE = "UPDATE contacts SET name = ?, email = ? WHERE id = ?";
   private static final String DELETE = "DELETE FROM contacts WHERE id = ?";
 
@@ -69,7 +69,7 @@ public class ContactRepository {
   public Contact insert(Contact person) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(INSERT)) {
-      statement.setObject(1, person.getId());
+      // statement.setObject(1, person.getId());
       statement.setString(2, person.getName());
       statement.setString(3, person.getEmail());
       statement.executeUpdate();

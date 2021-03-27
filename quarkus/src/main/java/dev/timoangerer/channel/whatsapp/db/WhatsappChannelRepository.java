@@ -1,0 +1,44 @@
+package dev.timoangerer.channel.whatsapp.db;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.sql.DataSource;
+
+import dev.timoangerer.contact.model.Contact;
+import dev.timoangerer.core.db.PersistenceException;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@ApplicationScoped
+public class WhatsappChannelRepository {
+
+    private static final String FIND_CONTACT_BY_ID = "select contacts.* from whatsapp_channels inner join channels on channels.id = whatsapp_channels.channel_id inner join contacts on contacts.id = channels.contact_id where wa_id = ?";
+
+    private final DataSource dataSource;
+
+    public WhatsappChannelRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public Contact findContactByWaId(String id) {
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_CONTACT_BY_ID)) {
+            statement.setObject(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Contact(UUID.fromString(resultSet.getString("id")), resultSet.getString("name"),
+                            resultSet.getString("email"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        }
+        return null;
+
+    }
+}
