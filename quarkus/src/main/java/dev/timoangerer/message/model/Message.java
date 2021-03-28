@@ -13,6 +13,15 @@ public class Message {
     private String sentAt;
     private String text;
 
+    public Message(UUID id, UUID contactId, UUID channelId, Boolean sentByContact, String sentAt, String text) {
+        this.id = id;
+        this.contactId = contactId;
+        this.channelId = channelId;
+        this.sentByContact = sentByContact;
+        this.sentAt = sentAt;
+        this.text = text;
+    }
+
     public Message(UUID contactId, UUID channelId, Boolean sentByContact, String sentAt, String text) {
         this.contactId = contactId;
         this.channelId = channelId;
