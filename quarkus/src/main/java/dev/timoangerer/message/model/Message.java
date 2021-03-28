@@ -8,16 +8,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Message {
     private UUID id;
     private UUID contactId;
-    private Boolean sentByContact;
     private UUID channelId;
+    private Boolean sentByContact;
     private String sentAt;
 
-    public Message(UUID id, UUID contactId, Boolean sentByContact, UUID channelId, String timestamp) {
-        this.id = id;
+    public Message(UUID contactId, UUID channelId, Boolean sentByContact, String sentAt) {
         this.contactId = contactId;
-        this.sentByContact = sentByContact;
         this.channelId = channelId;
-        this.sentAt = timestamp;
+        this.sentByContact = sentByContact;
+        this.sentAt = sentAt;
     }
 
     public UUID getId() {
@@ -52,12 +51,11 @@ public class Message {
         this.channelId = channelId;
     }
 
-    public String getTimestamp() {
+    public String getSentAt() {
         return sentAt;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.sentAt = timestamp;
+    public void setSentAt(String sentAt) {
+        this.sentAt = sentAt;
     }
-
 }
