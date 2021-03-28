@@ -25,6 +25,8 @@ public class MessageRepository {
 
     private static final String INSERT = "insert into messages (contact_id, channel_id, sent_by_contact, sent_at, text) values (?, ?, ?, ?, ?)";
 
+    private static final String FIND_ALL_BY_CONTACT_ID = "select * from messages where messages.contact_id = ?";
+
     private final DataSource dataSource;
 
     public MessageRepository(DataSource dataSource) {
@@ -61,5 +63,25 @@ public class MessageRepository {
         }
 
         return message;
+    }
+
+    public List<Message> findAll(UUID contactId) {
+        List<Message> result = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_CONTACT_ID)) {
+            statement.setObject(1, contactId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Message message = new Message(UUID.fromString(resultSet.getString("id")),
+                        UUID.fromString(resultSet.getString("contact_id")),
+                        UUID.fromString(resultSet.getString("channel_id")), resultSet.getBoolean("sent_by_contact"),
+                        resultSet.getTimestamp("sent_at").toString(), resultSet.getString("text"));
+
+                result.add(message);
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("boom", e.getCause());
+        }
+        return result;
     }
 }
