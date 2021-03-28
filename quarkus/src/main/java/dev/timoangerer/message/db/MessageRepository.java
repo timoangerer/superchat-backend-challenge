@@ -40,7 +40,7 @@ public class MessageRepository {
             statement.setObject(1, message.getContactId());
             statement.setObject(2, message.getChannelId());
             statement.setBoolean(3, message.getSentByContact());
-            statement.setTimestamp(4, Timestamp.from(Instant.ofEpochSecond(Integer.parseInt(message.getSentAt()))));
+            statement.setTimestamp(4, message.getSentAt());
             statement.setString(5, message.getText());
 
             int affectedRows = statement.executeUpdate();
@@ -75,7 +75,7 @@ public class MessageRepository {
                 Message message = new Message(UUID.fromString(resultSet.getString("id")),
                         UUID.fromString(resultSet.getString("contact_id")),
                         UUID.fromString(resultSet.getString("channel_id")), resultSet.getBoolean("sent_by_contact"),
-                        resultSet.getTimestamp("sent_at").toString(), resultSet.getString("text"));
+                        resultSet.getTimestamp("sent_at"), resultSet.getString("text"));
 
                 result.add(message);
             }

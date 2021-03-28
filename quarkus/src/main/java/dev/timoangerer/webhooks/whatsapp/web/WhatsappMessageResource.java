@@ -1,5 +1,7 @@
 package dev.timoangerer.webhooks.whatsapp.web;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.UUID;
 
 import javax.ws.rs.POST;
@@ -51,7 +53,7 @@ public class WhatsappMessageResource {
         System.out.println(channelId);
         System.out.println(whatsappMessage.getTimestamp());
 
-        Message message = new Message(contact.getId(), channelId, true, whatsappMessage.getTimestamp(), whatsappMessage.getText());
+        Message message = new Message(contact.getId(), channelId, true, Timestamp.from(Instant.ofEpochSecond(Integer.parseInt(whatsappMessage.getTimestamp()))), whatsappMessage.getText());
 
         Message savedMessage = messageRepository.insert(message);
         System.out.println("Id of created message: " + savedMessage.getId());

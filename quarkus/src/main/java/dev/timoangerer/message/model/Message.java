@@ -1,5 +1,6 @@
 package dev.timoangerer.message.model;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,10 +11,14 @@ public class Message {
     private UUID contactId;
     private UUID channelId;
     private Boolean sentByContact;
-    private String sentAt;
+    private Timestamp sentAt;
     private String text;
 
-    public Message(UUID id, UUID contactId, UUID channelId, Boolean sentByContact, String sentAt, String text) {
+    public Message() {
+        super();
+    }
+
+    public Message(UUID id, UUID contactId, UUID channelId, Boolean sentByContact, Timestamp sentAt, String text) {
         this.id = id;
         this.contactId = contactId;
         this.channelId = channelId;
@@ -22,7 +27,7 @@ public class Message {
         this.text = text;
     }
 
-    public Message(UUID contactId, UUID channelId, Boolean sentByContact, String sentAt, String text) {
+    public Message(UUID contactId, UUID channelId, Boolean sentByContact, Timestamp sentAt, String text) {
         this.contactId = contactId;
         this.channelId = channelId;
         this.sentByContact = sentByContact;
@@ -62,11 +67,11 @@ public class Message {
         this.channelId = channelId;
     }
 
-    public String getSentAt() {
+    public Timestamp getSentAt() {
         return sentAt;
     }
 
-    public void setSentAt(String sentAt) {
+    public void setSentAt(Timestamp sentAt) {
         this.sentAt = sentAt;
     }
 
@@ -76,5 +81,11 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return "Message [channelId=" + channelId + ", contactId=" + contactId + ", id=" + id + ", sentAt=" + sentAt
+                + ", sentByContact=" + sentByContact + ", text=" + text + "]";
     }
 }
