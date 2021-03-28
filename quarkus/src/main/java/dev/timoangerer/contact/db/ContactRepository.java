@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public class ContactRepository {
 
   private static final String FIND_ALL = "SELECT * FROM contacts";
   private static final String FIND_ALL_BY_ID = "SELECT * FROM contacts WHERE id = ?";
-  private static final String INSERT = "INSERT INTO contacts (id, name, email) VALUES (?, ?, ?)";
+  private static final String INSERT = "INSERT INTO contacts (name, email) VALUES (?, ?)";
   private static final String UPDATE = "UPDATE contacts SET name = ?, email = ? WHERE id = ?";
   private static final String DELETE = "DELETE FROM contacts WHERE id = ?";
 
@@ -36,11 +37,8 @@ public class ContactRepository {
         PreparedStatement statement = connection.prepareStatement(FIND_ALL);
         ResultSet resultSet = statement.executeQuery()) {
       while (resultSet.next()) {
-        result.add(
-            new Contact(
-                UUID.fromString(resultSet.getString("id")),
-                resultSet.getString("name"),
-                resultSet.getString("email")));
+        result.add(new Contact(UUID.fromString(resultSet.getString("id")), resultSet.getString("name"),
+            resultSet.getString("email")));
       }
     } catch (SQLException e) {
       throw new PersistenceException("boom", e.getCause());
@@ -54,9 +52,7 @@ public class ContactRepository {
       statement.setObject(1, id);
       try (ResultSet resultSet = statement.executeQuery()) {
         if (resultSet.next()) {
-          return new Contact(
-              UUID.fromString(resultSet.getString("id")),
-              resultSet.getString("name"),
+          return new Contact(UUID.fromString(resultSet.getString("id")), resultSet.getString("name"),
               resultSet.getString("email"));
         }
       }
@@ -68,14 +64,30 @@ public class ContactRepository {
 
   public Contact insert(Contact person) {
     try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(INSERT)) {
-      statement.setObject(1, person.getId());
-      statement.setString(2, person.getName());
-      statement.setString(3, person.getEmail());
-      statement.executeUpdate();
+        PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+      // statement.setObject(1, person.getId());
+      statement.setString(1, person.getName());
+      statement.setString(2, person.getEmail());
+
+      int affectedRows = statement.executeUpdate();
+
+      if (affectedRows == 0) {
+        throw new SQLException("Creating user failed, no rows affected.");
+      }
+
+      try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          String id = (generatedKeys.getString(1));
+          person.setId(UUID.fromString(id));
+        } else {
+          throw new SQLException("Creating user failed, no ID obtained.");
+        }
+      }
+
     } catch (SQLException e) {
       throw new PersistenceException(e);
     }
+
     return person;
   }
 
