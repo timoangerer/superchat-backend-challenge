@@ -23,7 +23,7 @@ import dev.timoangerer.message.model.Message;
 @ApplicationScoped
 public class MessageRepository {
 
-    private static final String INSERT = "insert into messages (contact_id, channel_id, sent_by_contact, sent_at) values (?, ?, ?, ?)";
+    private static final String INSERT = "insert into messages (contact_id, channel_id, sent_by_contact, sent_at, text) values (?, ?, ?, ?, ?)";
 
     private final DataSource dataSource;
 
@@ -39,6 +39,7 @@ public class MessageRepository {
             statement.setObject(2, message.getChannelId());
             statement.setBoolean(3, message.getSentByContact());
             statement.setTimestamp(4, Timestamp.from(Instant.ofEpochSecond(Integer.parseInt(message.getSentAt()))));
+            statement.setString(5, message.getText());
 
             int affectedRows = statement.executeUpdate();
 

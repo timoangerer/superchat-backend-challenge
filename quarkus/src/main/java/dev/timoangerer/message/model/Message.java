@@ -11,12 +11,14 @@ public class Message {
     private UUID channelId;
     private Boolean sentByContact;
     private String sentAt;
+    private String text;
 
-    public Message(UUID contactId, UUID channelId, Boolean sentByContact, String sentAt) {
+    public Message(UUID contactId, UUID channelId, Boolean sentByContact, String sentAt, String text) {
         this.contactId = contactId;
         this.channelId = channelId;
         this.sentByContact = sentByContact;
         this.sentAt = sentAt;
+        this.text = text;
     }
 
     public UUID getId() {
@@ -57,5 +59,13 @@ public class Message {
 
     public void setSentAt(String sentAt) {
         this.sentAt = sentAt;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

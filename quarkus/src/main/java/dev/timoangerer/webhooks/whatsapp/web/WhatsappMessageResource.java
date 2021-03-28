@@ -51,7 +51,7 @@ public class WhatsappMessageResource {
         System.out.println(channelId);
         System.out.println(whatsappMessage.getTimestamp());
 
-        Message message = new Message(contact.getId(), channelId, true, whatsappMessage.getTimestamp());
+        Message message = new Message(contact.getId(), channelId, true, whatsappMessage.getTimestamp(), whatsappMessage.getText());
 
         Message savedMessage = messageRepository.insert(message);
         System.out.println("Id of created message: " + savedMessage.getId());
