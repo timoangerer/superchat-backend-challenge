@@ -62,12 +62,12 @@ public class ContactRepository {
     return null;
   }
 
-  public Contact insert(Contact person) {
+  public Contact insert(Contact contact) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-      // statement.setObject(1, person.getId());
-      statement.setString(1, person.getName());
-      statement.setString(2, person.getEmail());
+      // statement.setObject(1, contact.getId());
+      statement.setString(1, contact.getName());
+      statement.setString(2, contact.getEmail());
 
       int affectedRows = statement.executeUpdate();
 
@@ -78,7 +78,7 @@ public class ContactRepository {
       try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
         if (generatedKeys.next()) {
           String id = (generatedKeys.getString(1));
-          person.setId(UUID.fromString(id));
+          contact.setId(UUID.fromString(id));
         } else {
           throw new SQLException("Creating user failed, no ID obtained.");
         }
@@ -88,20 +88,20 @@ public class ContactRepository {
       throw new PersistenceException(e);
     }
 
-    return person;
+    return contact;
   }
 
-  public Contact update(Contact person) {
+  public Contact update(Contact contact) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(UPDATE)) {
-      statement.setString(1, person.getName());
-      statement.setString(2, person.getEmail());
-      statement.setObject(3, person.getId());
+      statement.setString(1, contact.getName());
+      statement.setString(2, contact.getEmail());
+      statement.setObject(3, contact.getId());
       statement.executeUpdate();
     } catch (SQLException e) {
       throw new PersistenceException(e);
     }
-    return person;
+    return contact;
   }
 
   public boolean deleteById(UUID id) {
