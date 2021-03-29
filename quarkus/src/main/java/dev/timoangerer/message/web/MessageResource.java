@@ -32,8 +32,11 @@ public class MessageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> all(@QueryParam("contactId") UUID contactId) {
-        
-        return messageRepository.findAllByContactId(contactId);    
+        if (contactId == null) {
+            return messageRepository.findAll();
+        } else {
+            return messageRepository.findAllByContactId(contactId);    
+        }
     }
 
     @POST

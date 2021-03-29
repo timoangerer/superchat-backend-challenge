@@ -22,6 +22,9 @@ public class MessageRepository {
 
     private static final String FIND_ALL_BY_CONTACT_ID = "select * from messages where messages.contact_id = ?";
 
+    private static final String FIND_ALL = "select * from messages order by messages.sent_at asc";
+
+
     private final DataSource dataSource;
 
     public MessageRepository(DataSource dataSource) {
@@ -59,6 +62,23 @@ public class MessageRepository {
 
         return message;
     }
+
+    public List<Message> findAll() {
+        List<Message> result = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_ALL);
+            ResultSet resultSet = statement.executeQuery()) {
+          while (resultSet.next()) {
+            result.add(new Message(UUID.fromString(resultSet.getString("id")),
+            UUID.fromString(resultSet.getString("contact_id")),
+            UUID.fromString(resultSet.getString("channel_id")), resultSet.getBoolean("sent_by_contact"),
+            resultSet.getTimestamp("sent_at"), resultSet.getString("text")));
+          }
+        } catch (SQLException e) {
+          throw new PersistenceException("boom", e.getCause());
+        }
+        return result;
+      }
 
     public List<Message> findAllByContactId(UUID contactId) {
         List<Message> result = new ArrayList<>();
