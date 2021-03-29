@@ -9,6 +9,7 @@ import dev.timoangerer.contact.model.Contact;
 import dev.timoangerer.message.db.MessageRepository;
 import dev.timoangerer.message.model.Message;
 import dev.timoangerer.messaging.templating.GeneralTemplateVariables;
+import dev.timoangerer.messaging.templating.MissingTemplateVariableException;
 import dev.timoangerer.messaging.templating.ModelTemplateVariables;
 import dev.timoangerer.messaging.templating.TemplatingEngine;
 
@@ -27,11 +28,11 @@ public class MessagingService {
         this.contactRepository = contactRepository;
     }
 
-    public void sendMessage(Message message) {
+    public void sendMessage(Message message) throws MissingTemplateVariableException {
         ChannelType channelType = channelRepository.findChannelTypeByChannelId(message.getChannelId());
 
         TemplatingEngine templatingEngine = new TemplatingEngine();
-        templatingEngine.addVariables(GeneralTemplateVariables.getAllGeneralVariables());
+        templatingEngine.addVariables(GeneralTemplateVariables.getAll());
         Contact contact = contactRepository.findById(message.getContactId());
         templatingEngine.addVariables(ModelTemplateVariables.contactToMap(contact));
         String renderedTemplate = templatingEngine.renderTemplate(message.getText());
