@@ -48,12 +48,14 @@ public class WhatsappMessageResource {
         System.out.println("Contact from WA endpoint:");
         System.out.println(contact.getName());
 
-        System.out.println("Message content:");
-        System.out.println(contact.getId());
-        System.out.println(channelId);
-        System.out.println(whatsappMessage.getTimestamp());
+        // System.out.println("Message content:");
+        // System.out.println(contact.getId());
+        // System.out.println(channelId);
+        // System.out.println(whatsappMessage.getTimestamp());
 
         Message message = new Message(contact.getId(), channelId, true, Timestamp.from(Instant.ofEpochSecond(Integer.parseInt(whatsappMessage.getTimestamp()))), whatsappMessage.getText());
+        System.out.println("Message content:" + message.toString());
+
 
         Message savedMessage = messageRepository.insert(message);
         System.out.println("Id of created message: " + savedMessage.getId());

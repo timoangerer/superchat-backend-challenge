@@ -1,10 +1,6 @@
 package dev.timoangerer.message.db;
 
 import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
-
 import javax.sql.DataSource;
 
 import dev.timoangerer.core.db.PersistenceException;
@@ -65,7 +60,7 @@ public class MessageRepository {
         return message;
     }
 
-    public List<Message> findAll(UUID contactId) {
+    public List<Message> findAllByContactId(UUID contactId) {
         List<Message> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_CONTACT_ID)) {

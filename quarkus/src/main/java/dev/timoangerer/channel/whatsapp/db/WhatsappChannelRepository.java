@@ -63,8 +63,6 @@ public class WhatsappChannelRepository {
         return null;
     }
 
-    // TODO Using waId instead of an object. But WhatsappMessage object would be
-    // missleading. Better create a dedicated class for wa channel
     public UUID insert(Contact contact, String waId) {
 
         try (Connection connection = dataSource.getConnection();
@@ -81,7 +79,8 @@ public class WhatsappChannelRepository {
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    String id = (generatedKeys.getString(1));
+                    System.out.println("Generated Keys for WA insert: " + generatedKeys.getString(2));
+                    String id = (generatedKeys.getString(2));
 
                     return UUID.fromString(id);
                 } else {

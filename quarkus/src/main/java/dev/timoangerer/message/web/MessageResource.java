@@ -33,7 +33,7 @@ public class MessageResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> all(@QueryParam("contactId") UUID contactId) {
         
-        return messageRepository.findAll(contactId);    
+        return messageRepository.findAllByContactId(contactId);    
     }
 
     @POST
