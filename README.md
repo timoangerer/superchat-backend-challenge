@@ -82,3 +82,9 @@ You can specify placeholder variables with `${}` i.e to use the `name` placehold
 Currently available placeholder variables include customers `${name}` and `${email}`, as well as the current `${bitcoin}` price.
 
 The message fails if a placeholder variable can not be resolved. i.e if the message contains the `${email}` placeholder but there is no email address of the contact stored.
+
+---
+
+ER diagram of the current database schemas:
+
+![er-diagram](./er-diagram.png)
