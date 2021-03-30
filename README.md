@@ -60,7 +60,7 @@ Simulate two messages being sent to the Whatsapp webhook
     }'
 
 
-To replyto the Whatsapp message, create a message containing the `contactId`, `channelId` and the text itself.
+To reply to these Whatsapp messages, create a message containing the `contactId`, `channelId` and the text itself.
 
 The simplest way to get the `contactId` and `channelId` is by listing all messages and copying the values of the last received message:
 
@@ -71,8 +71,8 @@ Send a new message (insert the IDs)
     curl --location --request POST 'http://localhost:8080/messages' \
     --header 'Content-Type: application/json' \
     --data-raw '{
-        "contactId": "8abb5010-9126-11eb-bb5c-0242ac120003",
-        "channelId": "8abc4ce0-9126-11eb-bb5c-0242ac120003",
+        "contactId": "<insert contactId>",
+        "channelId": "<insert channelId>",
         "text": "Hey ${name}, yes, we offer take-away. Also, the current BTC price is at: ${bitcoin}"
     }'
 
